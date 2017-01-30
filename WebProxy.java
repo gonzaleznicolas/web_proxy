@@ -1,8 +1,8 @@
 /**
  * WebProxy Class
  * 
- * @author      XYZ
- * @version     1.0, 20 Jan 2017
+ * @author      Nicolas Gonzalez
+ * @version     1.1, 20 Jan 2017
  *
  */
 
