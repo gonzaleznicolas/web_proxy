@@ -26,7 +26,9 @@ public class TCPClient {
 		// if i wanted to connect to an external host, i would put the address or the ip address where i put local host
 		// each computer has a set of ports. each port can be used to listen to clients
 		// some of those ports are used for specific services. 
-		socket = new Socket("localhost", 8888);
+		InetAddress IPAddress = InetAddress.getByName("pages.cpsc.ucalgary.ca"); 
+
+		socket = new Socket(IPAddress, 80);
 
 		// Create necessary streams
 		
@@ -46,6 +48,7 @@ public class TCPClient {
 			// we read what the user types,
 			System.out.println("Enter Text Message for Echo Server: ");	
 			tmp = userinput.nextLine(); 
+			tmp = "GET /~cyriac.james/sample.txt HTTP/1.1\r\nHost: pages.cpsc.ucalgary.ca\r\nConnection: keep-alive\r\n\r\n";
 		
 			// Send user input message to server
 			outputStream.println(tmp);
@@ -54,6 +57,7 @@ public class TCPClient {
 		
 			// we expect to get a response. if we send a message and get no reply, we will get stuck here
 			s = inputStream.nextLine();
+			System.out.println("response:");
 			System.out.println(s);
 			
 			// Exit if message from server is "bye"
