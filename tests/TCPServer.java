@@ -64,7 +64,6 @@ public class TCPServer {
 		} //inner while loop
         } // outer while loop
         
-        // one problem with this code is th 
 		}
 	
 		catch (Exception e)
