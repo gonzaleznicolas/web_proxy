@@ -44,12 +44,13 @@ public class WebProxy {
 
                 // make streams
                 PrintWriter outputStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-                Scanner inputStream = new Scanner(socket.getInputStream(), "UTF-8");
+                //Scanner inputStream = new Scanner(socket.getInputStream(), "UTF-8");
+                InputStream is = socket.getInputStream();
                 //System.out.println("hi");
 
                 // now that we have a connection, wait for the client to send a message.
-                String line = "";
-                String fullMessage = "";
+                //String line = "";
+                //String fullMessage = "";
                 while(true)
                 {
                     //System.out.println("here");
@@ -57,15 +58,15 @@ public class WebProxy {
                                                 // when the client sends a message
                     //System.out.println(s); // print that message
 
-                    byte[] bytes = new byte[1024];
-                    bytes = "hello sir".getBytes();
-                    int index = 0;
-                    
+                    byte[] bytes = new byte[10000];
 
-                    System.out.println("aknowledgement0");
+                    System.out.println(is.read());
 
-                    while(inputStream.hasNextByte())
-                    {
+                    //System.out.println("aknowledgement0");
+
+                    //while(inputStream.hasNextByte())
+                    //{
+                        /*
                         System.out.println("aknowledgement1");
                         byte readByte = inputStream.nextByte();
                         System.out.println("aknowledgement2");
@@ -74,15 +75,17 @@ public class WebProxy {
                         {
                             System.out.println(bytes.toString());
                         }
+                        */
+
                         //System.out.println(character.toString());//Integer.toHexString(character));
                         //line = inputStream.nextLine();
                         //fullMessage = fullMessage + line + "\r\n";
-                        //if (line.contains("\n\r")) { break;}
+                        //if (line.contains("G")) { break;}
 
-                    }
+                    //}
                     
 
-                    //System.out.println(bytes.toString());
+                    //System.out.println("aknowledgement3");
                     
 
                     
