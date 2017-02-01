@@ -64,8 +64,8 @@ public class WebProxy {
                     System.out.println(numRepresentationOfByte);
                     byte byteRead = (byte) numRepresentationOfByte;
                     System.out.printf("0x%02X\n", byteRead);
-                    int charRepresentationOfByte = (char) byteRead;
-                    System.out.println(charRepresentationOfByte);
+                    System.out.printf("%c\n", numRepresentationOfByte);
+
 
                     if (numRepresentationOfByte == -1) {break;}
 
