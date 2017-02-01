@@ -52,11 +52,13 @@ public class WebProxy {
                 // make streams
                 PrintWriter outputStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
                 Scanner inputStream = new Scanner(socket.getInputStream(), "UTF-8");
+                System.out.println("hi");
 
                 // now that we have a connection, wait for the client to send a message.
                 while(true)
                 {
-                    s = inputStream.nextLine(); // waiting for a message. the server will only get out of this line
+                    System.out.println("here");
+                    String s = inputStream.nextLine(); // waiting for a message. the server will only get out of this line
                                                 // when the client sends a message
                     System.out.println(s); // print that message
                     
