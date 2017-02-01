@@ -29,7 +29,7 @@ public class TCPClient {
 		// some of those ports are used for specific services. 
 		InetAddress IPAddress = InetAddress.getByName("pages.cpsc.ucalgary.ca"); 
 
-		socket = new Socket(IPAddress, 80);
+		socket = new Socket("localhost", 8888);
 
 		// Create necessary streams
 		

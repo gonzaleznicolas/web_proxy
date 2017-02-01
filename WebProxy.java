@@ -25,15 +25,8 @@ public class WebProxy {
     {
     	/* Intialize server listening port */
         try { this.serverSocket = new ServerSocket(port); }
-        catch (Exception e){System.out.println("Error: " + e.getMessage());}
-        finally
-        {
-            if (this.serverSocket != null)
-            {
-                try { serverSocket.close();}
-                catch (IOException ex){/* ignore */}
-            }
-       }
+        catch (Exception e){System.out.println("Error1: " + e.getMessage());}
+
 	}
 
 
@@ -52,33 +45,52 @@ public class WebProxy {
                 // make streams
                 PrintWriter outputStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
                 Scanner inputStream = new Scanner(socket.getInputStream(), "UTF-8");
-                System.out.println("hi");
+                //System.out.println("hi");
 
                 // now that we have a connection, wait for the client to send a message.
+                String line = "";
+                String fullMessage = "";
                 while(true)
                 {
-                    System.out.println("here");
-                    String s = inputStream.nextLine(); // waiting for a message. the server will only get out of this line
+                    //System.out.println("here");
+                    //String s = inputStream.nextLine(); // waiting for a message. the server will only get out of this line
                                                 // when the client sends a message
-                    System.out.println(s); // print that message
+                    //System.out.println(s); // print that message
+
+                    byte[] bytes = new byte[1024];
+                    bytes = "hello sir".getBytes();
+                    int index = 0;
                     
-                    /*
-                    // exit if message from client is "bye"
-                    if(s.equalsIgnoreCase("bye"))
+
+                    System.out.println("aknowledgement0");
+
+                    while(inputStream.hasNextByte())
                     {
-                        outputStream.println("bye");
-                        outputStream.flush();
-                        break;
+                        System.out.println("aknowledgement1");
+                        byte readByte = inputStream.nextByte();
+                        System.out.println("aknowledgement2");
+                        bytes[index] = readByte;
+                        if (readByte == (byte) 0x35)
+                        {
+                            System.out.println(bytes.toString());
+                        }
+                        //System.out.println(character.toString());//Integer.toHexString(character));
+                        //line = inputStream.nextLine();
+                        //fullMessage = fullMessage + line + "\r\n";
+                        //if (line.contains("\n\r")) { break;}
+
                     }
-                    outputStream.println(s);
-                    outputStream.flush();
-                    */
+                    
+
+                    //System.out.println(bytes.toString());
+                    
+
                     
                 }
 
             }
         }
-        catch (Exception e){System.out.println("Error: " + e.getMessage());}
+        catch (Exception e){System.out.println("Error2: " + e.getMessage());}
         finally
         {
             if (this.socket != null)
