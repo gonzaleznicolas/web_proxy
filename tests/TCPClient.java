@@ -55,14 +55,21 @@ public class TCPClient {
 			//Flush to make sure message is send
 			outputStream.flush(); // output stream has a buffer so we want to flush it
 		
-			// we expect to get a response. if we send a message and get no reply, we will get stuck here
-			s = inputStream.nextLine();
 			System.out.println("response:");
-			System.out.println(s);
+
+			// we expect to get a response. if we send a message and get no reply, we will get stuck here
+			String responseMessage = "";
+			while(inputStream.hasNextLine())
+			{
+				s = inputStream.nextLine();
+				//responseMessage = responseMessage + s;
+				System.out.println(s);
+			}
+			//System.out.println(responseMessage);
 			
 			// Exit if message from server is "bye"
-			if(s.equalsIgnoreCase("bye"))
-				break;
+			//if(s.equalsIgnoreCase("bye"))
+			//	break;
 		
 		}
 		}	
