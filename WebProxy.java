@@ -60,9 +60,16 @@ public class WebProxy {
 
                     byte[] bytes = new byte[10000];
 
-                    System.out.println(is.read());
+                    int numRepresentationOfByte = is.read();
+                    System.out.println(numRepresentationOfByte);
+                    byte byteRead = (byte) numRepresentationOfByte;
+                    System.out.printf("0x%02X\n", byteRead);
+                    int charRepresentationOfByte = (char) byteRead;
+                    System.out.println(charRepresentationOfByte);
 
-                    //System.out.println("aknowledgement0");
+                    if (numRepresentationOfByte == -1) {break;}
+
+                    System.out.println("aknowledgement0");
 
                     //while(inputStream.hasNextByte())
                     //{
