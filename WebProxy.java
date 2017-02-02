@@ -122,6 +122,10 @@ public class WebProxy {
                     String hostName = requestMessageStartingAtHostName.substring(0,requestMessageStartingAtHostName.indexOf("\n")-1);
                     System.out.println(hostName);
 
+                    // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
+                    String pathName = requestMessage.substring(requestMessage.indexOf(hostName)+hostName.length()+1,requestMessage.indexOf("HTTP")-1);
+                    System.out.println(pathName);
+
 
 
 
