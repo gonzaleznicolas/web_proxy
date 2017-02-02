@@ -237,6 +237,23 @@ public class WebProxy {
                         data[i] = (byte) b;
                     }
 
+                    // make one array with the full response message: header lines and data
+                    int fullResponseLength = responseHeaderLines.length + data.length;
+                    byte[] fullResponseMessage = new byte[fullResponseLength];
+                    System.arraycopy( responseHeaderLines, 0, fullResponseMessage, 0, responseHeaderLines.length);
+                    System.arraycopy( data, 0, fullResponseMessage, responseHeaderLines.length, data.length );
+                    /*
+                    for (int i = 0; i < responseHeaderLines.length; i++)
+                    {
+                        fullResponseMessage[i] = responseHeaderLines[i];
+                    }
+                    for (int i = responseHeaderLines.length; i < fullResponseLength; i++)
+                    {
+                        fullResponseMessage[i] = data[i];
+                    }
+                    */
+                    String str = new String(fullResponseMessage);
+                    System.out.println(str);
 
 
 
