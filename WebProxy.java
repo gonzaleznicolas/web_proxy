@@ -44,9 +44,7 @@ public class WebProxy {
 
                 // make streams
                 PrintWriter outputStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-                //Scanner inputStream = new Scanner(socket.getInputStream(), "UTF-8");
                 InputStream is = socket.getInputStream();
-                Scanner inputStream = new Scanner(is, "UTF-8");
 
                 //System.out.println("hi");
 
@@ -90,7 +88,16 @@ public class WebProxy {
                         //System.out.printf("0x%02X\n", byteRead);
                         //System.out.printf("%c\n", numRepresentationOfByte);
                         bytes[index] = byteRead;
-
+                        /*
+                            System.out.println("index "+index);
+                            System.out.println("hasNextLine "+inputStream.hasNextLine());
+                            System.out.println("haveReachedEndOfHeaderLines "+haveReachedEndOfHeaderLines);
+                            System.out.println("numRepresentationOfByte "+numRepresentationOfByte);
+                            System.out.println("numberOfConsecutiveNorR "+numberOfConsecutiveNorR);
+                            System.out.println("indexAtWhichHeaderLinesEnd "+indexAtWhichHeaderLinesEnd);
+                            System.out.println("indexAtWhichDataEnds "+indexAtWhichDataEnds);
+                            System.out.println("--------------------------------");
+                        */
 
                         index++;
 
@@ -102,47 +109,22 @@ public class WebProxy {
                         headerLines[i] = bytes[i];
                     }
 
-                    String str = new String(headerLines);
+                    String requestMessage = new String(headerLines);
                     System.out.println("HO");
-                    System.out.println(str);
+                    System.out.println(requestMessage);
                     System.out.println("HI");
+                    System.out.println(headerLines.length);
+                    System.out.println(requestMessage.length());
+                    System.out.println(headerLines[headerLines.length-1]);
 
-                    /*
-                        System.out.println("index "+index);
-                        System.out.println("hasNextLine "+inputStream.hasNextLine());
-                        System.out.println("haveReachedEndOfHeaderLines "+haveReachedEndOfHeaderLines);
-                        System.out.println("numRepresentationOfByte "+numRepresentationOfByte);
-                        System.out.println("numberOfConsecutiveNorR "+numberOfConsecutiveNorR);
-                        System.out.println("indexAtWhichHeaderLinesEnd "+indexAtWhichHeaderLinesEnd);
-                        System.out.println("indexAtWhichDataEnds "+indexAtWhichDataEnds);
-                        System.out.println("--------------------------------");
-                    */
+                    // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
+                    String requestMessageStartingAtHostName = requestMessage.substring(requestMessage.indexOf("Host: ")+6);
+                    String hostName = requestMessageStartingAtHostName.substring(0,requestMessageStartingAtHostName.indexOf("\n")-1);
+                    System.out.println(hostName);
 
 
-                    System.out.println("aknowledgement0");
 
-                    //while(inputStream.hasNextByte())
-                    //{
-                        /*
-                        System.out.println("aknowledgement1");
-                        byte readByte = inputStream.nextByte();
-                        System.out.println("aknowledgement2");
-                        bytes[index] = readByte;
-                        if (readByte == (byte) 0x35)
-                        {
-                            System.out.println(bytes.toString());
-                        }
-                        */
 
-                        //System.out.println(character.toString());//Integer.toHexString(character));
-                        //line = inputStream.nextLine();
-                        //fullMessage = fullMessage + line + "\r\n";
-                        //if (line.contains("G")) { break;}
-
-                    //}
-                    
-
-                    //System.out.println("aknowledgement3");
                     
 
                     
