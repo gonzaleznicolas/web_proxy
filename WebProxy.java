@@ -174,7 +174,52 @@ public class WebProxy {
                     //TA ANSWER: the response message has a field that says how many bytes the answer is. read that many bytes.
                     // or, make conection "close" so the server closes the connection after.
 
+                    byte[] responseBytes = new byte[10000];
 
+                    boolean responseBytesLeft = true;
+                    int responseIndex = 0;
+                    int responseNumberOfConsecutiveNorR = 0;
+                    int responseIndexAtWhichHeaderLinesEnd = 0;
+                    int responseIndexAtWhichDataEnds = 0;
+                    boolean responseHaveReachedEndOfHeaderLines = false;
+                    while (responseHaveReachedEndOfHeaderLines==false)
+                    {
+                        int responseNumRepresentationOfByte = clientInputStream.read();
+                        if (responseNumRepresentationOfByte==10 || responseNumRepresentationOfByte==13)
+                        {
+                            responseNumberOfConsecutiveNorR++;
+                        }
+                        else
+                        {
+                            responseNumberOfConsecutiveNorR=0;
+                        }
+                        if (responseNumberOfConsecutiveNorR >= 4 && responseHaveReachedEndOfHeaderLines==false)
+                        {
+                            responseIndexAtWhichHeaderLinesEnd = index;
+                            responseHaveReachedEndOfHeaderLines = true;
+                        }
+                        byte responseByteRead = (byte) responseNumRepresentationOfByte;
+                        //System.out.printf("0x%02X\n", byteRead);
+                        //System.out.printf("%c\n", numRepresentationOfByte);
+                        responseBytes[responseIndex] = responseByteRead;
+
+                        responseIndex++;
+
+                    }
+
+                    byte[] responseHeaderLines = new byte[responseIndexAtWhichHeaderLinesEnd+1];
+                    for (int i = 0; i <= responseIndexAtWhichHeaderLinesEnd; i++)
+                    {
+                        responseHeaderLines[i] = responseBytes[i];
+                    }
+
+                    String responseMessage = new String(responseHeaderLines);
+                    System.out.println("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+                    System.out.println(responseMessage);
+                    System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+                    //System.out.println(headerLines.length);
+                    //System.out.println(requestMessage.length());
+                    //System.out.println(headerLines[headerLines.length-1]);
 
 
 
