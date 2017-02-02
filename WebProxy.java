@@ -163,6 +163,8 @@ public class WebProxy {
                     //Flush to make sure message is send
                     clientOutputStream.flush(); // output stream has a buffer so we want to flush it
 
+
+                    /********************************
                     // im at the stage where i have forwarded the client's request to the server, and now i want to read what
                     // the server responded so i can 1) write it to a file 2) send it back to the client.
                     // question:
@@ -173,7 +175,10 @@ public class WebProxy {
 
                     //TA ANSWER: the response message has a field that says how many bytes the answer is. read that many bytes.
                     // or, make conection "close" so the server closes the connection after.
+                    */////////////////////////////////////
 
+
+                    // GET REPLY FROM SERVER AND PUT IT INTO TWO ARRAYS: responseHeaderLines AND data
                     byte[] responseBytes = new byte[10000];
 
                     boolean responseBytesLeft = true;
@@ -217,9 +222,20 @@ public class WebProxy {
                     System.out.println("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
                     System.out.println(responseMessage);
                     System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
-                    //System.out.println(headerLines.length);
-                    //System.out.println(requestMessage.length());
-                    //System.out.println(headerLines[headerLines.length-1]);
+                    
+                    // now that we have the response header lines, we want to extract the Content-Length so we know how many bytes of data to read 
+                    String contentLengthTemp = responseMessage.substring(responseMessage.indexOf("Content-Length:")+16);
+                    String contentLengthTemp2 = contentLengthTemp.substring(0,contentLengthTemp.indexOf("\n")-1);
+                    int contentLength = new Integer (contentLengthTemp2);  // contentLength is the integer representation
+
+                    // create a byte array of the length of the data, then fill it with the remaining data in the
+                    // input stream (i.e. the web page since we already red all the header lines)
+                    byte[] data = new byte[contentLength];
+                    for (int i = 0; i < contentLength; i++)
+                    {
+                        int b = clientInputStream.read();
+                        data[i] = (byte) b;
+                    }
 
 
 
