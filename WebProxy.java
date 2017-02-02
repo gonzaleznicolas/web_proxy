@@ -46,6 +46,8 @@ public class WebProxy {
                 PrintWriter outputStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
                 //Scanner inputStream = new Scanner(socket.getInputStream(), "UTF-8");
                 InputStream is = socket.getInputStream();
+                Scanner inputStream = new Scanner(is, "UTF-8");
+
                 //System.out.println("hi");
 
                 // now that we have a connection, wait for the client to send a message.
@@ -60,14 +62,62 @@ public class WebProxy {
 
                     byte[] bytes = new byte[10000];
 
-                    int numRepresentationOfByte = is.read();
-                    System.out.println(numRepresentationOfByte);
-                    byte byteRead = (byte) numRepresentationOfByte;
-                    System.out.printf("0x%02X\n", byteRead);
-                    System.out.printf("%c\n", numRepresentationOfByte);
+
+                    boolean bytesLeft = true;
+                    int index = 0;
+                    int numberOfConsecutiveNorR = 0;
+                    int indexAtWhichHeaderLinesEnd = 0;
+                    int indexAtWhichDataEnds = 0;
+                    boolean haveReachedEndOfHeaderLines = false;
+                    while (haveReachedEndOfHeaderLines==false)
+                    {
+                        //if (index >= 180) break;
+                        int numRepresentationOfByte = is.read();
+                        if (numRepresentationOfByte==10 || numRepresentationOfByte==13)
+                        {
+                            numberOfConsecutiveNorR++;
+                        }
+                        else
+                        {
+                            numberOfConsecutiveNorR=0;
+                        }
+                        if (numberOfConsecutiveNorR >= 4 && haveReachedEndOfHeaderLines==false)
+                        {
+                            indexAtWhichHeaderLinesEnd = index;
+                            haveReachedEndOfHeaderLines = true;
+                        }
+                        byte byteRead = (byte) numRepresentationOfByte;
+                        //System.out.printf("0x%02X\n", byteRead);
+                        //System.out.printf("%c\n", numRepresentationOfByte);
+                        bytes[index] = byteRead;
 
 
-                    if (numRepresentationOfByte == -1) {break;}
+                        index++;
+
+                    }
+
+                    byte[] headerLines = new byte[indexAtWhichHeaderLinesEnd+1];
+                    for (int i = 0; i <= indexAtWhichHeaderLinesEnd; i++)
+                    {
+                        headerLines[i] = bytes[i];
+                    }
+
+                    String str = new String(headerLines);
+                    System.out.println("HO");
+                    System.out.println(str);
+                    System.out.println("HI");
+
+                    /*
+                        System.out.println("index "+index);
+                        System.out.println("hasNextLine "+inputStream.hasNextLine());
+                        System.out.println("haveReachedEndOfHeaderLines "+haveReachedEndOfHeaderLines);
+                        System.out.println("numRepresentationOfByte "+numRepresentationOfByte);
+                        System.out.println("numberOfConsecutiveNorR "+numberOfConsecutiveNorR);
+                        System.out.println("indexAtWhichHeaderLinesEnd "+indexAtWhichHeaderLinesEnd);
+                        System.out.println("indexAtWhichDataEnds "+indexAtWhichDataEnds);
+                        System.out.println("--------------------------------");
+                    */
+
 
                     System.out.println("aknowledgement0");
 
