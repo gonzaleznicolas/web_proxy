@@ -117,6 +117,16 @@ public class WebProxy {
                     System.out.println(requestMessage.length());
                     System.out.println(headerLines[headerLines.length-1]);
 
+                    // CHECK THAT CLIENT MADE A "get" REQUEST. IF NOT, SEND A RESPONSE MESSAGE WITH
+                    // STATUS CODE "400 Bad Request"
+
+                    /* ####################################################################
+                    #######################################################################
+                    #######################################################################
+                    #######################################################################
+                    #######################################################################
+                    ###################################################################### */
+
                     // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
                     String requestMessageStartingAtHostName = requestMessage.substring(requestMessage.indexOf("Host: ")+6);
                     String hostName = requestMessageStartingAtHostName.substring(0,requestMessageStartingAtHostName.indexOf("\n")-1);
@@ -125,6 +135,28 @@ public class WebProxy {
                     // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
                     String pathName = requestMessage.substring(requestMessage.indexOf(hostName)+hostName.length()+1,requestMessage.indexOf("HTTP")-1);
                     System.out.println(pathName);
+
+                    // CHECK IF THE OBJECT REQUESTED IS AVAILABLE IN THE LOCAL CACHE
+                    /* ####################################################################
+                    #######################################################################
+                    #######################################################################
+                    #######################################################################
+                    #######################################################################
+                    ###################################################################### */
+
+                    // IF SO, RETURN IT FROM THE LOCAL CACHE
+                    /* ####################################################################
+                    #######################################################################
+                    #######################################################################
+                    #######################################################################
+                    #######################################################################
+                    ###################################################################### */
+
+                    // ELSE, GET IT FROM THE INTERNET
+                    InetAddress IPAddress = InetAddress.getByName(hostName); // get IP address of server
+                    
+
+
 
 
 

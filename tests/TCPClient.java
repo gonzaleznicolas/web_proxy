@@ -9,8 +9,7 @@ public class TCPClient {
 	public static void main(String[] args)
 	{
 		
-		String tmp;
-		String s = "";
+		String s, tmp;
 		// COMMENTED OUT BECAUSE THEY ARE DEFINED LATER
 		//Scanner inputStream;
 		//PrintWriter outputStream;
@@ -29,7 +28,7 @@ public class TCPClient {
 		// some of those ports are used for specific services. 
 		InetAddress IPAddress = InetAddress.getByName("pages.cpsc.ucalgary.ca"); 
 
-		socket = new Socket("localhost", 8888);
+		socket = new Socket(IPAddress, 80);
 
 		// Create necessary streams
 		
@@ -49,7 +48,7 @@ public class TCPClient {
 			// we read what the user types,
 			System.out.println("Enter Text Message for Echo Server: ");	
 			tmp = userinput.nextLine(); 
-			tmp = "GET /~cyriac.james/sample.txt HTTP/1.0\r\nHost: pages.cpsc.ucalgary.ca\r\nConnection: keep-alive\r\n\r\n";
+			tmp = "GET /~cyriac.james/sample.txt HTTP/1.1\r\nHost: pages.cpsc.ucalgary.ca\r\nConnection: keep-alive\r\n\r\n";
 		
 			// Send user input message to server
 			outputStream.println(tmp);
@@ -63,15 +62,14 @@ public class TCPClient {
 			while(inputStream.hasNextLine())
 			{
 				s = inputStream.nextLine();
-				responseMessage = responseMessage + s + "\r\n";
-				//System.out.println(s);
+				//responseMessage = responseMessage + s;
+				System.out.println(s);
 			}
-			System.out.println("this is the response message:");
-			System.out.println(responseMessage);
+			//System.out.println(responseMessage);
 			
 			// Exit if message from server is "bye"
-			if(s.equalsIgnoreCase("bye"))
-				break;
+			//if(s.equalsIgnoreCase("bye"))
+			//	break;
 		
 		}
 		}	
