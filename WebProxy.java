@@ -43,7 +43,8 @@ public class WebProxy {
                 socket = serverSocket.accept(); // instantiate new socket
 
                 // make streams
-                PrintWriter outputStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+                //PrintWriter outputStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+                OutputStream os = socket.getOutputStream();
                 InputStream is = socket.getInputStream();
 
                 //System.out.println("hi");
@@ -133,6 +134,7 @@ public class WebProxy {
                     String pathName = requestMessage.substring(requestMessage.indexOf(hostName)+hostName.length()+1,requestMessage.indexOf("HTTP")-1);
                     System.out.println(pathName);
 
+
                     // CHECK IF THE OBJECT REQUESTED IS AVAILABLE IN THE LOCAL CACHE
                     /* ####################################################################
                     #######################################################################
@@ -140,6 +142,9 @@ public class WebProxy {
                     #######################################################################
                     #######################################################################
                     ###################################################################### */
+
+                    // IF NOT, PUT IT IN THE CACHE WITH THE CORRECT DIRECTORY STUCTURE
+
 
                     // IF SO, RETURN IT FROM THE LOCAL CACHE
                     /* ####################################################################
@@ -164,19 +169,6 @@ public class WebProxy {
                     clientOutputStream.flush(); // output stream has a buffer so we want to flush it
 
 
-                    /********************************
-                    // im at the stage where i have forwarded the client's request to the server, and now i want to read what
-                    // the server responded so i can 1) write it to a file 2) send it back to the client.
-                    // question:
-                        // can i do that by reading one byte from that input stream, and immediately writing that same byte to a file output
-                        // stream and to the output stream that speaks to the client?
-                    // if so, how do i identify the end of the data? bcause what i noticed when getting the request message from the client,
-                    // was that when the data is done, -1 is not returned by read(), instead it just waits for more data.
-
-                    //TA ANSWER: the response message has a field that says how many bytes the answer is. read that many bytes.
-                    // or, make conection "close" so the server closes the connection after.
-                    */////////////////////////////////////
-
 
                     // GET REPLY FROM SERVER AND PUT IT INTO TWO ARRAYS: responseHeaderLines AND data
                     byte[] responseBytes = new byte[10000];
@@ -200,7 +192,7 @@ public class WebProxy {
                         }
                         if (responseNumberOfConsecutiveNorR >= 4 && responseHaveReachedEndOfHeaderLines==false)
                         {
-                            responseIndexAtWhichHeaderLinesEnd = index;
+                            responseIndexAtWhichHeaderLinesEnd = responseIndex;
                             responseHaveReachedEndOfHeaderLines = true;
                         }
                         byte responseByteRead = (byte) responseNumRepresentationOfByte;
@@ -242,23 +234,22 @@ public class WebProxy {
                     byte[] fullResponseMessage = new byte[fullResponseLength];
                     System.arraycopy( responseHeaderLines, 0, fullResponseMessage, 0, responseHeaderLines.length);
                     System.arraycopy( data, 0, fullResponseMessage, responseHeaderLines.length, data.length );
-                    /*
-                    for (int i = 0; i < responseHeaderLines.length; i++)
-                    {
-                        fullResponseMessage[i] = responseHeaderLines[i];
-                    }
-                    for (int i = responseHeaderLines.length; i < fullResponseLength; i++)
-                    {
-                        fullResponseMessage[i] = data[i];
-                    }
-                    */
+
                     String str = new String(fullResponseMessage);
                     System.out.println(str);
 
-
-
-
                     
+                    for (int i = 0; i<fullResponseMessage.length; i++)
+                    {
+                        System.out.println(fullResponseMessage[i]);
+                        //os.write(fullResponseMessage[i]);
+                    }
+                    
+
+                    // NOW SEND THIS MESSAGE BACK TO THE CLIENT
+                    os.write(fullResponseMessage);
+                    os.flush();
+           
 
                     
                 }
