@@ -49,8 +49,6 @@ public class WebProxy {
                 //System.out.println("hi");
 
                 // now that we have a connection, wait for the client to send a message.
-                //String line = "";
-                //String fullMessage = "";
                 while(true)
                 {
                     //System.out.println("here");
@@ -166,14 +164,16 @@ public class WebProxy {
                     //Flush to make sure message is send
                     clientOutputStream.flush(); // output stream has a buffer so we want to flush it
 
-                    String responseMessage = "";
-                    String s = "";
-                    while(inputStream.hasNextLine())
-                    {
-                        s = inputStream.nextLine();
-                        //responseMessage = responseMessage + s;
-                        System.out.println(s);
-                    }
+                    // im at the stage where i have forwarded the client's request to the server, and now i want to read what
+                    // the server responded so i can 1) write it to a file 2) send it back to the client.
+                    // question:
+                        // can i do that by reading one byte from that input stream, and immediately writing that same byte to a file output
+                        // stream and to the output stream that speaks to the client?
+                    // if so, how do i identify the end of the data? bcause what i noticed when getting the request message from the client,
+                    // was that when the data is done, -1 is not returned by read(), instead it just waits for more data.
+
+                    //TA ANSWER: the response message has a field that says how many bytes the answer is. read that many bytes.
+                    // or, make conection "close" so the server closes the connection after.
 
 
 
