@@ -153,8 +153,29 @@ public class WebProxy {
                     ###################################################################### */
 
                     // ELSE, GET IT FROM THE INTERNET
-                    InetAddress IPAddress = InetAddress.getByName(hostName); // get IP address of server
-                    
+                    InetAddress ipOfServer = InetAddress.getByName(hostName); // get IP address of server
+
+                    Socket clientSocket = new Socket(ipOfServer, 80);
+
+                    PrintWriter clientOutputStream = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
+                    //InputStream clientInputStream = clientSocket.getInputStream();
+                    Scanner inputStream = new Scanner(clientSocket.getInputStream(), "UTF-8");
+
+
+                    // Send http request message to the server
+                    clientOutputStream.println(requestMessage);
+                    //Flush to make sure message is send
+                    clientOutputStream.flush(); // output stream has a buffer so we want to flush it
+
+                    String responseMessage = "";
+                    String s = "";
+                    while(inputStream.hasNextLine())
+                    {
+                        s = inputStream.nextLine();
+                        //responseMessage = responseMessage + s;
+                        System.out.println(s);
+                    }
+
 
 
 
