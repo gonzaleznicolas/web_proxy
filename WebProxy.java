@@ -158,8 +158,7 @@ public class WebProxy {
                     Socket clientSocket = new Socket(ipOfServer, 80);
 
                     PrintWriter clientOutputStream = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
-                    //InputStream clientInputStream = clientSocket.getInputStream();
-                    Scanner inputStream = new Scanner(clientSocket.getInputStream(), "UTF-8");
+                    InputStream clientInputStream = clientSocket.getInputStream();
 
 
                     // Send http request message to the server
