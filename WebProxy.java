@@ -45,7 +45,6 @@ public class WebProxy {
                 socket = serverSocket.accept(); // instantiate new socket
 
                 // make streams
-                //PrintWriter outputStream = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
                 OutputStream os = socket.getOutputStream();
                 InputStream is = socket.getInputStream();
 
@@ -109,12 +108,19 @@ public class WebProxy {
                     // CHECK THAT CLIENT MADE A "get" REQUEST. IF NOT, SEND A RESPONSE MESSAGE WITH
                     // STATUS CODE "400 Bad Request"
 
-                    /* ####################################################################
-                    #######################################################################
-                    #######################################################################
-                    #######################################################################
-                    #######################################################################
-                    ###################################################################### */
+                    // if it is not a request message
+
+                    
+                    
+                    if (!requestMessage.contains("GET") || requestMessage.contains("If-modified-since:") || requestMessage.contains("If-Modified-Since:"))
+                    {
+                        System.out.println("BAD REQUEST!!!!!!!!!!!");
+                        String badReq = "HTTP/1.1 400 Bad Request\r\n\r\n";
+                        byte[] br = badReq.getBytes();
+                        os.write(br);
+                    }
+                    
+                    
 
                     // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
                     String requestMessageStartingAtHostName = requestMessage.substring(requestMessage.indexOf("Host: ")+6);
