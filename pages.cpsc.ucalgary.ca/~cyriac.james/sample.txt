@@ -1,0 +1,3 @@
+this is test file for cpsc 441
+name: sample.txt
+date: 20 Jan 2017

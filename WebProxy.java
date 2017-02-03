@@ -253,8 +253,11 @@ public class WebProxy {
                     }
 
                     String responseMessage = new String(responseHeaderLines);
+                    System.out.println(responseMessage);
+                    System.out.println("------------------------------------------------");
+                    responseMessage = responseMessage.replace("Connection: keep-alive", "Connection: close");
                     //System.out.println("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-                    //System.out.println(responseMessage);
+                    System.out.println(responseMessage);
                     //System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
                     
                     // now that we have the response header lines, we want to extract the Content-Length so we know how many bytes of data to read 
