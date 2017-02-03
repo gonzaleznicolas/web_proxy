@@ -134,10 +134,68 @@ public class WebProxy {
                 String fullFileName1 = hostName+"/"+pathName;
                 File tentativeFile = new File(fullFileName1);
                 boolean doesItExistAlready = tentativeFile.exists();
+                byte[] dataFromFile = new byte[10000];
+                int index1 = -1;
                 if (doesItExistAlready == true)
                 {
                     // IF SO, RETURN IT FROM THE LOCAL CACHE
-                    System.out.println("I HAVE IT IN THE CACHE");
+                    System.out.println("IT IS IN THE CACHE");
+                    FileInputStream fin = null;
+                    try
+                    {
+                        fin = new FileInputStream(fullFileName1);
+                        while(true)
+                        {
+                            index1++;
+                            int byteReadAsInt = fin.read();
+                            if (byteReadAsInt == -1)
+                                break;
+                            // if here, we read a byte from the file
+                            dataFromFile[index1] = (byte) byteReadAsInt;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        System.out.println("Exception writing to file: " + e.getMessage());
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            if (fin != null)
+                            {
+                                fin.close();
+                                System.out.println("closing file");
+                            }
+                        }
+                        catch (IOException ex)
+                        {
+                            System.out.println("error closing file.");
+                        }
+                    }
+                    Integer temporary = index1;
+                    String first2lines = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Length: " + temporary.toString() + "\r\n\r\n";
+                    System.out.println(first2lines);
+
+                    byte[] theHeader = first2lines.getBytes();
+
+                    int finalLength = theHeader.length + index1;
+                    byte[] completeFile = new byte[finalLength];
+
+                    System.arraycopy( theHeader, 0, completeFile, 0, theHeader.length);
+                    System.arraycopy( dataFromFile, 0, completeFile, theHeader.length, index1);
+
+                    /*
+                    for (int i = 0; i < completeFile.length; i++)
+                    {
+                        System.out.print((char) completeFile[i]);
+                    }
+                    */
+                    // NOW SEND THIS MESSAGE BACK TO THE CLIENT
+                    os.write(completeFile);
+                    os.flush();
+
+
                 }
                 else // the page is not in the cache
                 {
