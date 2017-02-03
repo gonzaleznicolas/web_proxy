@@ -134,7 +134,7 @@ public class WebProxy {
                 String fullFileName1 = hostName+"/"+pathName;
                 File tentativeFile = new File(fullFileName1);
                 boolean doesItExistAlready = tentativeFile.exists();
-                byte[] dataFromFile = new byte[10000];
+                byte[] dataFromFile = new byte[500000];
                 int index1 = -1;
                 if (doesItExistAlready == true)
                 {
@@ -216,7 +216,7 @@ public class WebProxy {
 
 
                     // GET REPLY FROM SERVER AND PUT IT INTO TWO ARRAYS: responseHeaderLines AND data
-                    byte[] responseBytes = new byte[10000];
+                    byte[] responseBytes = new byte[50000];
 
                     boolean responseBytesLeft = true;
                     int responseIndex = 0;
