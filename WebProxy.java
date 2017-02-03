@@ -51,108 +51,96 @@ public class WebProxy {
                 //System.out.println("hi");
 
                 // now that we have a connection, wait for the client to send a message.
-                //while(true)
-                //{
-                    //System.out.println("here");
-                    //String s = inputStream.nextLine(); // waiting for a message. the server will only get out of this line
-                                                // when the client sends a message
-                    //System.out.println(s); // print that message
 
-                    byte[] bytes = new byte[10000];
+                //System.out.println("here");
+                //String s = inputStream.nextLine(); // waiting for a message. the server will only get out of this line
+                                            // when the client sends a message
+                //System.out.println(s); // print that message
 
-                    boolean bytesLeft = true;
-                    int index = 0;
-                    int numberOfConsecutiveNorR = 0;
-                    int indexAtWhichHeaderLinesEnd = 0;
-                    int indexAtWhichDataEnds = 0;
-                    boolean haveReachedEndOfHeaderLines = false;
-                    while (haveReachedEndOfHeaderLines==false)
+                byte[] bytes = new byte[10000];
+
+                boolean bytesLeft = true;
+                int index = 0;
+                int numberOfConsecutiveNorR = 0;
+                int indexAtWhichHeaderLinesEnd = 0;
+                int indexAtWhichDataEnds = 0;
+                boolean haveReachedEndOfHeaderLines = false;
+                while (haveReachedEndOfHeaderLines==false)
+                {
+                    //if (index >= 180) break;
+                    int numRepresentationOfByte = is.read();
+                    if (numRepresentationOfByte==10 || numRepresentationOfByte==13)
                     {
-                        //if (index >= 180) break;
-                        int numRepresentationOfByte = is.read();
-                        if (numRepresentationOfByte==10 || numRepresentationOfByte==13)
-                        {
-                            numberOfConsecutiveNorR++;
-                        }
-                        else
-                        {
-                            numberOfConsecutiveNorR=0;
-                        }
-                        if (numberOfConsecutiveNorR >= 4 && haveReachedEndOfHeaderLines==false)
-                        {
-                            indexAtWhichHeaderLinesEnd = index;
-                            haveReachedEndOfHeaderLines = true;
-                        }
-                        byte byteRead = (byte) numRepresentationOfByte;
-
-                        bytes[index] = byteRead;
-
-                        index++;
-
+                        numberOfConsecutiveNorR++;
                     }
-
-                    byte[] headerLines = new byte[indexAtWhichHeaderLinesEnd+1];
-                    for (int i = 0; i <= indexAtWhichHeaderLinesEnd; i++)
+                    else
                     {
-                        headerLines[i] = bytes[i];
+                        numberOfConsecutiveNorR=0;
                     }
-
-                    String requestMessage = new String(headerLines);
-                    System.out.println("HO");
-                    System.out.println(requestMessage);
-                    System.out.println("HI");
-                    System.out.println(headerLines.length);
-                    System.out.println(requestMessage.length());
-                    System.out.println(headerLines[headerLines.length-1]);
-
-                    // CHECK THAT CLIENT MADE A "get" REQUEST. IF NOT, SEND A RESPONSE MESSAGE WITH
-                    // STATUS CODE "400 Bad Request"
-
-                    // if it is not a request message
-
-                    
-                    
-                    if (!requestMessage.contains("GET") || requestMessage.contains("If-modified-since:") || requestMessage.contains("If-Modified-Since:"))
+                    if (numberOfConsecutiveNorR >= 4 && haveReachedEndOfHeaderLines==false)
                     {
-                        System.out.println("BAD REQUEST!!!!!!!!!!!");
-                        String badReq = "HTTP/1.1 400 Bad Request\r\n\r\n";
-                        byte[] br = badReq.getBytes();
-                        os.write(br);
+                        indexAtWhichHeaderLinesEnd = index;
+                        haveReachedEndOfHeaderLines = true;
                     }
-                    
-                    
+                    byte byteRead = (byte) numRepresentationOfByte;
 
-                    // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
-                    String requestMessageStartingAtHostName = requestMessage.substring(requestMessage.indexOf("Host: ")+6);
-                    String hostName = requestMessageStartingAtHostName.substring(0,requestMessageStartingAtHostName.indexOf("\n")-1);
-                    System.out.println(hostName);
+                    bytes[index] = byteRead;
 
-                    // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
-                    String pathName = requestMessage.substring(requestMessage.indexOf(hostName)+hostName.length()+1,requestMessage.indexOf("HTTP")-1);
-                    System.out.println(pathName);
+                    index++;
+
+                }
+
+                byte[] headerLines = new byte[indexAtWhichHeaderLinesEnd+1];
+                for (int i = 0; i <= indexAtWhichHeaderLinesEnd; i++)
+                {
+                    headerLines[i] = bytes[i];
+                }
+
+                String requestMessage = new String(headerLines);
+                System.out.println("HO");
+                System.out.println(requestMessage);
+                System.out.println("HI");
+                System.out.println(headerLines.length);
+                System.out.println(requestMessage.length());
+                System.out.println(headerLines[headerLines.length-1]);
+
+                // CHECK THAT CLIENT MADE A "get" REQUEST. IF NOT, SEND A RESPONSE MESSAGE WITH
+                // STATUS CODE "400 Bad Request"
+
+                // if it is not a request message
+
+                
+                
+                if (!requestMessage.contains("GET") || requestMessage.contains("If-modified-since:") || requestMessage.contains("If-Modified-Since:"))
+                {
+                    String badReq = "HTTP/1.1 400 Bad Request\r\n\r\n";
+                    byte[] br = badReq.getBytes();
+                    os.write(br);
+                }
+                
+                
+
+                // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
+                String requestMessageStartingAtHostName = requestMessage.substring(requestMessage.indexOf("Host: ")+6);
+                String hostName = requestMessageStartingAtHostName.substring(0,requestMessageStartingAtHostName.indexOf("\n")-1);
+                System.out.println(hostName);
+
+                // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
+                String pathName = requestMessage.substring(requestMessage.indexOf(hostName)+hostName.length()+1,requestMessage.indexOf("HTTP")-1);
+                System.out.println(pathName);
 
 
-                    // CHECK IF THE OBJECT REQUESTED IS AVAILABLE IN THE LOCAL CACHE
-                    /* ####################################################################
-                    #######################################################################
-                    #######################################################################
-                    #######################################################################
-                    #######################################################################
-                    ###################################################################### */
-
-
-
-
-
-
+                // CHECK IF THE OBJECT REQUESTED IS AVAILABLE IN THE LOCAL CACHE
+                String fullFileName1 = hostName+"/"+pathName;
+                File tentativeFile = new File(fullFileName1);
+                boolean doesItExistAlready = tentativeFile.exists();
+                if (doesItExistAlready == true)
+                {
                     // IF SO, RETURN IT FROM THE LOCAL CACHE
-                    /* ####################################################################
-                    #######################################################################
-                    #######################################################################
-                    #######################################################################
-                    #######################################################################
-                    ###################################################################### */
-
+                    System.out.println("I HAVE IT IN THE CACHE");
+                }
+                else // the page is not in the cache
+                {
                     // ELSE, GET IT FROM THE INTERNET
                     InetAddress ipOfServer = InetAddress.getByName(hostName); // get IP address of server
 
@@ -241,8 +229,8 @@ public class WebProxy {
                     // create file
                     String urlWOfileName = hostName + "/" + pathName.substring(0,pathName.lastIndexOf("/"));
                     String fileName = pathName.substring(pathName.lastIndexOf("/")+1, pathName.length());
-                    System.out.println(urlWOfileName);
-                    System.out.println(fileName);
+                    //System.out.println(urlWOfileName);
+                    //System.out.println(fileName);
                     String cumulativePathName = "";
                     String[] ary = urlWOfileName.split("/");
                     for (int i = 0; i<ary.length; i++)
@@ -301,10 +289,10 @@ public class WebProxy {
                     // NOW SEND THIS MESSAGE BACK TO THE CLIENT
                     os.write(fullResponseMessage);
                     os.flush();
-           
 
-                    
-                //}
+                }
+
+
 
             }
         }
