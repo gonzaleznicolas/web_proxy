@@ -2,16 +2,13 @@
  * WebProxy Class
  * 
  * @author      Nicolas Gonzalez
- * @version     1.1, 20 Jan 2017
+ * @version     1.2 3 Feb 2017
  *
  */
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
-
-
 
 public class WebProxy {
 
@@ -97,12 +94,12 @@ public class WebProxy {
                 }
 
                 String requestMessage = new String(headerLines);
-                System.out.println("HO");
-                System.out.println(requestMessage);
-                System.out.println("HI");
-                System.out.println(headerLines.length);
-                System.out.println(requestMessage.length());
-                System.out.println(headerLines[headerLines.length-1]);
+                //System.out.println("HO");
+                //System.out.println(requestMessage);
+                //System.out.println("HI");
+                //System.out.println(headerLines.length);
+                //System.out.println(requestMessage.length());
+                //System.out.println(headerLines[headerLines.length-1]);
 
                 // CHECK THAT CLIENT MADE A "get" REQUEST. IF NOT, SEND A RESPONSE MESSAGE WITH
                 // STATUS CODE "400 Bad Request"
@@ -123,11 +120,11 @@ public class WebProxy {
                 // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
                 String requestMessageStartingAtHostName = requestMessage.substring(requestMessage.indexOf("Host: ")+6);
                 String hostName = requestMessageStartingAtHostName.substring(0,requestMessageStartingAtHostName.indexOf("\n")-1);
-                System.out.println(hostName);
+                //System.out.println(hostName);
 
                 // EXTRACT THE HOST NAME FROM THE REQUEST MESSAGE
                 String pathName = requestMessage.substring(requestMessage.indexOf(hostName)+hostName.length()+1,requestMessage.indexOf("HTTP")-1);
-                System.out.println(pathName);
+                //System.out.println(pathName);
 
 
                 // CHECK IF THE OBJECT REQUESTED IS AVAILABLE IN THE LOCAL CACHE
@@ -165,7 +162,7 @@ public class WebProxy {
                             if (fin != null)
                             {
                                 fin.close();
-                                System.out.println("closing file");
+                                //System.out.println("closing file");
                             }
                         }
                         catch (IOException ex)
@@ -175,7 +172,7 @@ public class WebProxy {
                     }
                     Integer temporary = index1;
                     String first2lines = "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Length: " + temporary.toString() + "\r\n\r\n";
-                    System.out.println(first2lines);
+                    //System.out.println(first2lines);
 
                     byte[] theHeader = first2lines.getBytes();
 
@@ -256,9 +253,9 @@ public class WebProxy {
                     }
 
                     String responseMessage = new String(responseHeaderLines);
-                    System.out.println("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-                    System.out.println(responseMessage);
-                    System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+                    //System.out.println("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+                    //System.out.println(responseMessage);
+                    //System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
                     
                     // now that we have the response header lines, we want to extract the Content-Length so we know how many bytes of data to read 
                     String contentLengthTemp = responseMessage.substring(responseMessage.indexOf("Content-Length:")+16);
@@ -293,11 +290,11 @@ public class WebProxy {
                     String[] ary = urlWOfileName.split("/");
                     for (int i = 0; i<ary.length; i++)
                     {
-                        System.out.println(ary[i]);
+                        //System.out.println(ary[i]);
                         cumulativePathName = cumulativePathName + ary[i] + "/";
                         File element = new File(cumulativePathName);
                         boolean val = element.mkdir();
-                        System.out.println(val);
+                        //System.out.println(val);
                     }
 
                     String fullFileName = cumulativePathName+fileName;
@@ -333,7 +330,7 @@ public class WebProxy {
                             if (fout != null)
                             {
                                 fout.close();
-                                System.out.println("closing file");
+                                //System.out.println("closing file");
                             }
                         }
                         catch (IOException ex)
@@ -360,7 +357,7 @@ public class WebProxy {
             if (this.socket != null)
             {
                 try { socket.close();}
-                catch (IOException ex){/* ignore */}
+                catch (IOException ex){System.out.println("Exception in main: " + ex.getMessage());}
             }
        }
 
