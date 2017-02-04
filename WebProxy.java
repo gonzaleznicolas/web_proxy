@@ -94,8 +94,9 @@ public class WebProxy {
                 }
 
                 String requestMessage = new String(headerLines);
+
+                System.out.println("this is the message that the client sent::::::\n" + requestMessage);
                 //System.out.println("HO");
-                //System.out.println(requestMessage);
                 //System.out.println("HI");
                 //System.out.println(headerLines.length);
                 //System.out.println(requestMessage.length());
@@ -192,10 +193,15 @@ public class WebProxy {
                     os.write(completeFile);
                     os.flush();
 
+                    String theString = new String(completeFile);
+                    System.out.println("the message sent from the cache to the client::::::\n"+theString);
+
 
                 }
                 else // the page is not in the cache
                 {
+                    System.out.println("GET IT FROM THE INTERNET");
+
                     // ELSE, GET IT FROM THE INTERNET
                     InetAddress ipOfServer = InetAddress.getByName(hostName); // get IP address of server
 
@@ -203,6 +209,9 @@ public class WebProxy {
 
                     PrintWriter clientOutputStream = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
                     InputStream clientInputStream = clientSocket.getInputStream();
+
+                    requestMessage = requestMessage.replace("Connection: keep-alive", "Connection: close");
+                    System.out.println("This is the request message forwarded to the server::::::\n"+requestMessage);
 
 
                     // Send http request message to the server
@@ -253,11 +262,11 @@ public class WebProxy {
                     }
 
                     String responseMessage = new String(responseHeaderLines);
-                    System.out.println(responseMessage);
-                    System.out.println("------------------------------------------------");
+                    //System.out.println(responseMessage);
+                    //System.out.println("------------------------------------------------");
                     responseMessage = responseMessage.replace("Connection: keep-alive", "Connection: close");
                     //System.out.println("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-                    System.out.println(responseMessage);
+                    //System.out.println(responseMessage);
                     //System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
                     
                     // now that we have the response header lines, we want to extract the Content-Length so we know how many bytes of data to read 
@@ -279,6 +288,9 @@ public class WebProxy {
                     byte[] fullResponseMessage = new byte[fullResponseLength];
                     System.arraycopy( responseHeaderLines, 0, fullResponseMessage, 0, responseHeaderLines.length);
                     System.arraycopy( data, 0, fullResponseMessage, responseHeaderLines.length, data.length );
+
+                    String stringg = new String(fullResponseMessage);
+                    System.out.println("this is the message forwarded from the internet to the client::::::\n"+stringg);
 
 
 
