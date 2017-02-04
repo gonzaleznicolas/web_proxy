@@ -95,7 +95,7 @@ public class WebProxy {
 
                 String requestMessage = new String(headerLines);
 
-                System.out.println("this is the message that the client sent::::::\n" + requestMessage);
+                //System.out.println("this is the message that the client sent::::::\n" + requestMessage);
                 //System.out.println("HO");
                 //System.out.println("HI");
                 //System.out.println(headerLines.length);
@@ -194,7 +194,7 @@ public class WebProxy {
                     os.flush();
 
                     String theString = new String(completeFile);
-                    System.out.println("the message sent from the cache to the client::::::\n"+theString);
+                    //System.out.println("the message sent from the cache to the client::::::\n"+theString);
 
 
                 }
@@ -211,7 +211,7 @@ public class WebProxy {
                     InputStream clientInputStream = clientSocket.getInputStream();
 
                     requestMessage = requestMessage.replace("Connection: keep-alive", "Connection: close");
-                    System.out.println("This is the request message forwarded to the server::::::\n"+requestMessage);
+                    //System.out.println("This is the request message forwarded to the server::::::\n"+requestMessage);
 
 
                     // Send http request message to the server
@@ -290,7 +290,7 @@ public class WebProxy {
                     System.arraycopy( data, 0, fullResponseMessage, responseHeaderLines.length, data.length );
 
                     String stringg = new String(fullResponseMessage);
-                    System.out.println("this is the message forwarded from the internet to the client::::::\n"+stringg);
+                    //System.out.println("this is the message forwarded from the internet to the client::::::\n"+stringg);
 
 
 
